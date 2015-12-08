@@ -11,6 +11,7 @@ public class Client implements Runnable
 	private Boolean running;
 	private int id;
 	public String playerName; //id
+	public int playerSlot;
 	
 	public Client(Socket s, int id)
 	{
@@ -19,6 +20,8 @@ public class Client implements Runnable
 		{
 			this.in = new Scanner(socket.getInputStream());
 			this.playerName = in.nextLine(); //potentially unsafe...
+			this.playerSlot =  Integer.parseInt(in.nextLine());
+			System.out.printf("received name : %s and slot %d \n",this.playerName, this.playerSlot);
 		} 
 		catch (IOException e) 
 		{
@@ -48,13 +51,18 @@ public class Client implements Runnable
 				if  (in.hasNextLine())
 				{
 					String line = in.nextLine();
-					String msg = String.format("client: %s [%d] : %s",this.playerName, this.id, line);
-					System.out.println(String.format("%s [%d]: %s", socket.toString(),id,line));
+					String msg = String.format("%s", line);
+					System.out.println(String.format("client: %s [%s:%d]: sent data ",this.playerName ,socket.toString(),id));
 					Server.getInstance().sendMessageToAll(msg);
 					if(line.toLowerCase().equals("###"))
 					{	
 						this.running = false;
 						break;
+					}
+					if(line.toLowerCase().equals("give players"))
+					{
+						Server.getInstance().sendMessageToAll(Server.getInstance().getPlayerList());
+						Server.getInstance().sendMessageToClient(Server.getInstance().clients.get(0), "become leader");
 					}
 					System.out.println("stood");	
 				}
