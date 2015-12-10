@@ -53,16 +53,19 @@ public class Client implements Runnable
 					String line = in.nextLine();
 					String msg = String.format("%s", line);
 					System.out.println(String.format("client: %s [%s:%d]: sent data ",this.playerName ,socket.toString(),id));
-					Server.getInstance().sendMessageToAll(msg);
 					if(line.toLowerCase().equals("###"))
 					{	
 						this.running = false;
 						break;
 					}
-					if(line.toLowerCase().equals("give players"))
+					else if(line.toLowerCase().equals("give players"))
 					{
 						Server.getInstance().sendMessageToAll(Server.getInstance().getPlayerList());
 						Server.getInstance().sendMessageToClient(Server.getInstance().clients.get(0), "become leader");
+					}
+					else
+					{
+						Server.getInstance().sendMessageToAll(msg);
 					}
 					System.out.println("stood");	
 				}
