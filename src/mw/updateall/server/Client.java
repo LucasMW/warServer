@@ -84,7 +84,6 @@ public class Client implements Runnable
 				}
 		}
 		in.close();
-		System.out.println("fuck");
 		Server.getInstance().removeClient(this);
 		this.end();
 		

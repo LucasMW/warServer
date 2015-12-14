@@ -92,7 +92,7 @@ public class Server
 	public void removeClient(Client client)
 	{
 		this.clients.remove(client);
-		System.out.printf("removed %s \n",client.toString());
+		System.out.printf("removed %s: \n",client.playerName, client.playerSlot);
 	}
 	
 	void sendMessageToAll(String msg) 
